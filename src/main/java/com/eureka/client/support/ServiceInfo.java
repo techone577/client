@@ -12,7 +12,7 @@ import java.lang.annotation.*;
 @Documented
 public @interface ServiceInfo {
 
-    String name() default "";
+    String name () default "";
 
-    String description() default "";
+    String description () default "";
 }

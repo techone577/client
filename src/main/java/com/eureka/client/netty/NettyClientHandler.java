@@ -1,5 +1,7 @@
 package com.eureka.client.netty;
 
+import com.eureka.client.model.constant.NettyHeader;
+import com.eureka.client.model.entity.NettyEntity;
 import com.eureka.client.support.ApplicationContextCache;
 import com.eureka.client.support.ServiceConfig;
 import com.eureka.client.support.utils.JsonUtil;
@@ -15,13 +17,16 @@ import java.util.List;
  * @date 2018/12/15
  */
 public class NettyClientHandler extends ChannelInboundHandlerAdapter {
-    private  ByteBuf firstMSG;
+    private ByteBuf firstMSG;
 
     public NettyClientHandler () {
         //注册方法信息
+        NettyEntity nettyEntity = new NettyEntity();
         List<ServiceConfig> list = ApplicationContextCache.getServiceConfig();
-        if (null != list && list.size() > 0){
-            byte[] req = JsonUtil.toString(list).getBytes();
+        nettyEntity.setHeader(NettyHeader.REGISTRY);
+        nettyEntity.setParams(JsonUtil.toString(list));
+        if (null != list && list.size() > 0) {
+            byte[] req = JsonUtil.toString(nettyEntity).getBytes();
             firstMSG = Unpooled.buffer(req.length);
             firstMSG.writeBytes(req);
         }

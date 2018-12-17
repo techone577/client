@@ -12,5 +12,5 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public interface ServiceClient {
 
     @RequestMapping(value = "/test/serviceTest")
-    String feignTest();
+    String feignTest ();
 }

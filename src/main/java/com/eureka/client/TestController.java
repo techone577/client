@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
 /**
  * @author techoneduan
@@ -18,7 +19,7 @@ public class TestController {
     @Autowired
     private ServiceClient client;
 
-    @RequestMapping(value = "/test",method = RequestMethod.POST)
+    @RequestMapping(value = "/test")
     @ServiceInfo(name = "BLOG.TestController.test",description = "测试方法注册")
     public String test(){
 //        String res = client.feignTest();
