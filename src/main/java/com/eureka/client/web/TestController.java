@@ -1,12 +1,12 @@
-package com.eureka.client;
+package com.eureka.client.web;
 
-import com.eureka.client.netty.NettyClient;
-import com.eureka.client.support.ServiceInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.eureka.client.model.constant.NettyHeader;
+import com.eureka.client.model.entity.NettyReqEntity;
+import com.eureka.client.netty.ServiceClient;
+import com.eureka.client.support.annotation.ServiceInfo;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author techoneduan
@@ -15,9 +15,6 @@ import org.springframework.web.client.RestTemplate;
 @RestController
 @RequestMapping("/test")
 public class TestController {
-
-    @Autowired
-    private ServiceClient client;
 
     @RequestMapping(value = "/test")
     @ServiceInfo(name = "BLOG.TestController.test",description = "测试方法注册")
@@ -31,7 +28,9 @@ public class TestController {
     public String test2(){
 //        String res = client.feignTest();
 //        return res;
-        NettyClient.send("hello");
-        return "re";
+        NettyReqEntity entity = new NettyReqEntity();
+        entity.setHeader(NettyHeader.REQUEST);
+        entity.setParams("test");
+        return ServiceClient.call(entity);
     }
 }

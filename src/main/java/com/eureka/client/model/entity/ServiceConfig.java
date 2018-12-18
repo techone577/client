@@ -1,5 +1,7 @@
-package com.eureka.client.support;
+package com.eureka.client.model.entity;
 
+
+import com.eureka.client.model.constant.RestMethod;
 
 /**
  * @author techoneduan

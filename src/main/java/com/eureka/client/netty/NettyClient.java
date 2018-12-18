@@ -1,12 +1,10 @@
 package com.eureka.client.netty;
 
+import com.eureka.client.support.utils.Response;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -25,7 +23,7 @@ public class NettyClient {
     private static Bootstrap client = null;
     private static ChannelFuture future = null;
 
-    public static void connect() throws Exception{
+    public static void connect () throws Exception {
         //配置客户端NIO 线程组
         group = new NioEventLoopGroup();
         client = new Bootstrap();
@@ -35,7 +33,7 @@ public class NettyClient {
                     .option(ChannelOption.TCP_NODELAY, true)
                     .handler(new ChannelInitializer<SocketChannel>() {
                         @Override
-                        protected void initChannel(SocketChannel ch) throws Exception {
+                        protected void initChannel (SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(new NettyClientHandler());
                         }
                     });
@@ -51,12 +49,12 @@ public class NettyClient {
         }
     }
 
-    public static void send(String str){
-        ByteBuf firstMSG;
+    public static void send (String str) {
+        ByteBuf MSG;
         byte[] req = str.getBytes();
-        firstMSG = Unpooled.buffer(req.length);
-        firstMSG.writeBytes(req);
-        if(null != future)
-            future.channel().writeAndFlush(firstMSG);
+        MSG = Unpooled.buffer(req.length);
+        MSG.writeBytes(req);
+        if (null != future)
+            future.channel().writeAndFlush(MSG);
     }
 }

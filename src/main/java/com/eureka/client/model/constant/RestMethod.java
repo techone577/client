@@ -1,4 +1,4 @@
-package com.eureka.client.support;
+package com.eureka.client.model.constant;
 
 public class RestMethod {
     /**

@@ -1,5 +1,9 @@
-package com.eureka.client.support;
+package com.eureka.client.support.spring;
 
+import com.eureka.client.model.constant.RestMethod;
+import com.eureka.client.model.entity.ServiceConfig;
+import com.eureka.client.service.FactoryListHolder;
+import com.eureka.client.support.annotation.ServiceInfo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,6 +47,10 @@ public class ApplicationContextCache implements ApplicationContextAware {
 
     public synchronized static List<ServiceConfig> getServiceConfig () {
         return list;
+    }
+
+    public static FactoryListHolder getFactoryListHolder () {
+        return null == applicationContextCache ? null : (FactoryListHolder) applicationContextCache.getBean("factoryListHolder");
     }
 
     private void scan (ApplicationContext ct, List<ServiceConfig> list) {
