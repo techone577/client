@@ -1,13 +1,15 @@
 package com.eureka.client.support.spring;
 
 import com.eureka.client.model.constant.RestMethod;
-import com.eureka.client.model.entity.ServiceConfig;
+import com.eureka.client.model.eureka.RegistryInfo;
+import com.eureka.client.model.eureka.ServiceConfig;
 import com.eureka.client.service.FactoryListHolder;
 import com.eureka.client.support.annotation.ServiceInfo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.lang.reflect.Method;
+import java.net.InetAddress;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -25,18 +28,27 @@ import java.util.stream.Collectors;
  */
 @Component
 public class ApplicationContextCache implements ApplicationContextAware {
-
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationContextCache.class);
+
+    @Value("${server.port}")
+    private String port;
+
+    @Value("${spring.application.name}")
+    private String clientName;
 
     private static ApplicationContext applicationContextCache;
 
     private static List<ServiceConfig> list;
+
+    private static RegistryInfo registryInfo;
+
 
     //TODO why synchronized?
     @Override
     public synchronized void setApplicationContext (ApplicationContext applicationContext) throws BeansException {
         applicationContextCache = applicationContext;
         list = new ArrayList<>();
+        registryInfo = new RegistryInfo();
         scan(applicationContextCache, list);
         LOG.info("扫描服务结束...");
     }
@@ -48,6 +60,11 @@ public class ApplicationContextCache implements ApplicationContextAware {
     public synchronized static List<ServiceConfig> getServiceConfig () {
         return list;
     }
+
+    public static RegistryInfo getRegistryInfo () {
+        return registryInfo;
+    }
+
 
     public static FactoryListHolder getFactoryListHolder () {
         return null == applicationContextCache ? null : (FactoryListHolder) applicationContextCache.getBean("factoryListHolder");
@@ -117,6 +134,14 @@ public class ApplicationContextCache implements ApplicationContextAware {
             }
             list.add(sc);
         }
+        registryInfo.setClientName(clientName);
+        registryInfo.setPort(port);
+        try {
+            registryInfo.setIpaddr(InetAddress.getLocalHost().getHostAddress());
+        } catch (Exception e) {
+            LOG.info("获取ip异常:{}", e);
+        }
+        registryInfo.setServiceConfigs(list);
     }
 
     private String formatMapping (String mapping) {

@@ -3,10 +3,9 @@ package com.eureka.client.netty;
 import com.eureka.client.model.constant.NettyHeader;
 import com.eureka.client.model.entity.NettyReqEntity;
 import com.eureka.client.model.entity.NettyRespEntity;
-import com.eureka.client.model.syncMap.SyncMap;
-import com.eureka.client.service.FactoryListHolder;
+import com.eureka.client.model.eureka.RegistryInfo;
 import com.eureka.client.support.spring.ApplicationContextCache;
-import com.eureka.client.model.entity.ServiceConfig;
+import com.eureka.client.model.eureka.ServiceConfig;
 import com.eureka.client.support.utils.JsonUtil;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -35,11 +34,11 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
     public NettyClientHandler () {
         //注册方法信息
         NettyReqEntity nettyReqEntity = new NettyReqEntity();
-        List<ServiceConfig> list = ApplicationContextCache.getServiceConfig();
+        RegistryInfo registryInfo = ApplicationContextCache.getRegistryInfo();
         nettyReqEntity.setRequestId(UUID.randomUUID().toString());
         nettyReqEntity.setHeader(NettyHeader.REGISTRY);
-        nettyReqEntity.setParams(JsonUtil.toString(list));
-        if (null != list && list.size() > 0) {
+        nettyReqEntity.setParams(JsonUtil.toString(registryInfo));
+        if (null != registryInfo.getServiceConfigs() && registryInfo.getServiceConfigs().size() > 0) {
             byte[] req = JsonUtil.toString(nettyReqEntity).getBytes();
             MSG = Unpooled.buffer(req.length);
             MSG.writeBytes(req);
@@ -62,6 +61,8 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
 //        if (!SyncMap.hasKey(respEntity.getRequestId())) {
 //            SyncMap.put(respEntity.getRequestId(), respEntity.getResponse());
 //        }
+        if (respEntity == null)
+            return;
         ApplicationContextCache.getFactoryListHolder().getNettyService().getBean(respEntity.getRespType()).dealRequest(respEntity);
 
     }

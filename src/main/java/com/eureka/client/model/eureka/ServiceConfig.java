@@ -1,4 +1,4 @@
-package com.eureka.client.model.entity;
+package com.eureka.client.model.eureka;
 
 
 import com.eureka.client.model.constant.RestMethod;

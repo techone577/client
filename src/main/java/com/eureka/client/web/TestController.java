@@ -24,7 +24,7 @@ public class TestController {
     }
 
     @RequestMapping(value = "/test2",method = RequestMethod.POST)
-    @ServiceInfo(name = "BLOG.TestController.test",description = "测试方法注册")
+    @ServiceInfo(name = "BLOG.TestController.test2",description = "测试方法注册")
     public String test2(){
 //        String res = client.feignTest();
 //        return res;
