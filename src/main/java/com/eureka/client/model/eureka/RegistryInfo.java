@@ -16,6 +16,8 @@ public class RegistryInfo {
 
     private List<ServiceConfig> serviceConfigs;
 
+    private List<String> subscribeServices;
+
     public String getClientName () {
         return clientName;
     }
@@ -46,5 +48,13 @@ public class RegistryInfo {
 
     public void setServiceConfigs (List<ServiceConfig> serviceConfigs) {
         this.serviceConfigs = serviceConfigs;
+    }
+
+    public List<String> getSubscribeServices () {
+        return subscribeServices;
+    }
+
+    public void setSubscribeServices (List<String> subscribeServices) {
+        this.subscribeServices = subscribeServices;
     }
 }

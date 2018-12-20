@@ -1,5 +1,6 @@
 package com.eureka.client.support.spring;
 
+import com.eureka.client.model.constant.BspSubscribeService;
 import com.eureka.client.model.constant.RestMethod;
 import com.eureka.client.model.eureka.RegistryInfo;
 import com.eureka.client.model.eureka.ServiceConfig;
@@ -142,6 +143,7 @@ public class ApplicationContextCache implements ApplicationContextAware {
             LOG.info("获取ip异常:{}", e);
         }
         registryInfo.setServiceConfigs(list);
+        registryInfo.setSubscribeServices(BspSubscribeService.subscribeList);
     }
 
     private String formatMapping (String mapping) {
