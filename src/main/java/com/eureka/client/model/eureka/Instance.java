@@ -3,6 +3,8 @@ package com.eureka.client.model.eureka;
 /**
  * @author techoneduan
  * @date 2018/12/17
+ *
+ * eureka 注册中心注册实例实体类
  */
 public class Instance {
 

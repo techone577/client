@@ -5,6 +5,7 @@ import java.util.List;
 /**
  * @author techoneduan
  * @date 2018/12/17
+ * 系统-多个实例
  */
 public class ServiceInstance {
 

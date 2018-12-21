@@ -5,17 +5,27 @@ import java.util.List;
 /**
  * @author techoneduan
  * @date 2018/12/19
+ *
+ * client 注册信息
  */
 public class RegistryInfo {
 
+    /**
+     * application name 系统名称
+     */
     private String clientName;
 
     private String ipaddr;
 
     private String port;
-
+    /**
+     * 提供的服务信息
+     */
     private List<ServiceConfig> serviceConfigs;
 
+    /**
+     * 订阅的服务名称
+     */
     private List<String> subscribeServices;
 
     public String getClientName () {

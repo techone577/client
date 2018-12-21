@@ -1,6 +1,5 @@
 package com.eureka.client.netty;
 
-import com.eureka.client.support.utils.Response;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -15,6 +14,8 @@ import io.netty.handler.codec.string.StringDecoder;
 /**
  * @author techoneduan
  * @date 2018/12/15
+ *
+ * netty客户端
  */
 public class NettyClient {
 
@@ -38,18 +39,27 @@ public class NettyClient {
                         @Override
                         protected void initChannel (SocketChannel ch) throws Exception {
                             ch.pipeline().addLast(new NettyClientHandler());
+                            /**
+                             * 配置 RECVBUF_ALLOCATOR 和 netty提供的编解码器 解决长消息截断 粘包分包问题
+                             */
                             ch.pipeline().addLast(new LineBasedFrameDecoder(1024));
                             ch.pipeline().addLast(new StringDecoder());
                         }
                     });
 
-            //绑定端口, 异步连接操作
+            /**
+             * 绑定端口, 异步连接操作
+             */
             future = client.connect(host, port).sync();
 
-            //等待客户端连接端口关闭
+            /**
+             * 等待客户端连接端口关闭
+             */
             future.channel().closeFuture().sync();
         } finally {
-            //优雅关闭 线程组
+            /**
+             * 优雅关闭 线程组
+             */
             group.shutdownGracefully();
         }
     }

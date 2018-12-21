@@ -1,4 +1,4 @@
-package com.eureka.client.support.utils;
+package com.eureka.client.model.entity;
 
 /**
  * @TechoneDuan

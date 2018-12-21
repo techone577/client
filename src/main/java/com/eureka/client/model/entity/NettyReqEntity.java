@@ -3,6 +3,8 @@ package com.eureka.client.model.entity;
 /**
  * @author techoneduan
  * @date 2018/12/17
+ *
+ * netty 请求入参 header 为请求类型 NettyHeader
  */
 public class NettyReqEntity {
 

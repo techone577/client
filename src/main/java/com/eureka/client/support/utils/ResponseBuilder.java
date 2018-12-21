@@ -1,5 +1,7 @@
 package com.eureka.client.support.utils;
 
+import com.eureka.client.model.entity.Response;
+
 /**
  * @author techoneduan
  * @date 2018/11/6

@@ -21,6 +21,8 @@ import java.util.UUID;
 /**
  * @author techoneduan
  * @date 2018/12/15
+ *
+ * netty客户端处理器
  */
 public class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
@@ -32,7 +34,9 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
 
 
     public NettyClientHandler () {
-        //注册方法信息
+        /**
+         * 连接时扫描组装注册信息
+         */
         NettyReqEntity nettyReqEntity = new NettyReqEntity();
         RegistryInfo registryInfo = ApplicationContextCache.getRegistryInfo();
         nettyReqEntity.setRequestId(UUID.randomUUID().toString());
@@ -58,11 +62,11 @@ public class NettyClientHandler extends ChannelInboundHandlerAdapter {
         String body = new String(req, "UTF-8");
         LOG.info("response:{}", body);
         NettyRespEntity respEntity = JsonUtil.toBean(body, NettyRespEntity.class);
-//        if (!SyncMap.hasKey(respEntity.getRequestId())) {
-//            SyncMap.put(respEntity.getRequestId(), respEntity.getResponse());
-//        }
         if (respEntity == null)
             return;
+        /**
+         * 处理不同请求 策略模式
+         */
         ApplicationContextCache.getFactoryListHolder().getNettyService().getBean(respEntity.getRespType()).dealRequest(respEntity);
 
     }

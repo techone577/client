@@ -15,7 +15,9 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 public class ClientApplication {
 
     private static final Logger LOG = LoggerFactory.getLogger(ClientApplication.class);
+
     public static void main (String[] args) {
+
         SpringApplication.run(ClientApplication.class, args);
 
         try {

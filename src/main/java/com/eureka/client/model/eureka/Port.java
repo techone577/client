@@ -3,6 +3,8 @@ package com.eureka.client.model.eureka;
 /**
  * @author techoneduan
  * @date 2018/12/17
+ *
+ * 端口实体类 包括普通端口和安全端口
  */
 public class Port {
 

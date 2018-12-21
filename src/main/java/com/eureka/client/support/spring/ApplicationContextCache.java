@@ -1,6 +1,7 @@
 package com.eureka.client.support.spring;
 
 import com.eureka.client.model.constant.BspSubscribeService;
+import com.eureka.client.model.constant.PropertiesHolder;
 import com.eureka.client.model.constant.RestMethod;
 import com.eureka.client.model.eureka.RegistryInfo;
 import com.eureka.client.model.eureka.ServiceConfig;
@@ -26,6 +27,8 @@ import java.util.stream.Collectors;
 /**
  * @author techoneduan
  * @date 2018/12/14
+ *
+ * 缓存应用上下文
  */
 @Component
 public class ApplicationContextCache implements ApplicationContextAware {
@@ -66,9 +69,12 @@ public class ApplicationContextCache implements ApplicationContextAware {
         return registryInfo;
     }
 
-
     public static FactoryListHolder getFactoryListHolder () {
         return null == applicationContextCache ? null : (FactoryListHolder) applicationContextCache.getBean("factoryListHolder");
+    }
+
+    public static PropertiesHolder getPropertiesHolder () {
+        return null == applicationContextCache ? null : (PropertiesHolder) applicationContextCache.getBean("propertiesHolder");
     }
 
     private void scan (ApplicationContext ct, List<ServiceConfig> list) {

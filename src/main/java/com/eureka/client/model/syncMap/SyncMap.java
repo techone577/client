@@ -6,8 +6,9 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author techoneduan
  * @date 2018/12/18
+ *
+ * 全局Map 满足netty异步转为同步操作
  */
-//netty同步模型
 public class SyncMap {
 
     private static Map<String, String> syncMap = new ConcurrentHashMap<>();

@@ -3,6 +3,8 @@ package com.eureka.client.model.entity;
 /**
  * @author techoneduan
  * @date 2018/12/18
+ *
+ * netty 请求返回 需要同步操作时使用唯一的requestId
  */
 public class NettyRespEntity {
 

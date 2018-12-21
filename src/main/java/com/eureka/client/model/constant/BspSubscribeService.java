@@ -9,9 +9,12 @@ import java.util.List;
  */
 public class BspSubscribeService {
 
+    /**
+     * 注册成为该服务的消费者 统一管理
+     */
     public static List<String> subscribeList = new ArrayList<String>(){
         {
-            add("BLOG.TestController.test");
+            add("blogging.test");
         }
     };
 }
