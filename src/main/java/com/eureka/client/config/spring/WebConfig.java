@@ -11,7 +11,8 @@ import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 
 /**
- * Created by stefanxu on 2018/8/2.
+ * @author techoneduan
+ * @date 2019/1/2
  */
 @Configuration
 @ComponentScan(basePackages = "com.eureka.client.web.view")
