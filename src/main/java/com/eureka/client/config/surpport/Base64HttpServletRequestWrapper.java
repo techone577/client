@@ -4,6 +4,8 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 
+import javax.servlet.ReadListener;
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import java.io.*;
@@ -108,6 +110,43 @@ public class Base64HttpServletRequestWrapper extends HttpServletRequestWrapper {
             cacheBytes();
         InputStreamReader isr = new InputStreamReader(new ByteArrayInputStream(bytes), encoding);
         return new BufferedReader(isr);
+    }
+
+    public ServletInputStream getInputStream() throws IOException{
+        if (null == bytes || bytes.length == 0)
+            return getHttpServletRequest().getInputStream();
+        ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+        Base64FilterServletInputStream bfis = new Base64FilterServletInputStream(bis);
+        return bfis;
+    }
+
+    class Base64FilterServletInputStream extends ServletInputStream {
+        private InputStream inputStream;
+
+        public Base64FilterServletInputStream(InputStream inputStream){
+            super();
+            this.inputStream = inputStream;
+        }
+
+        @Override
+        public boolean isFinished() {
+            return false;
+        }
+
+        @Override
+        public boolean isReady() {
+            return false;
+        }
+
+        @Override
+        public void setReadListener(ReadListener readListener) {
+            return;
+        }
+
+        @Override
+        public int read() throws IOException {
+            return inputStream.read();
+        }
     }
 
     private void cacheBytes () throws IOException {
