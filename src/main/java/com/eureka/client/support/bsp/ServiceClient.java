@@ -81,6 +81,7 @@ public class ServiceClient {
             ResponseEntity<String> responseEntity = restTemplate.getForEntity(uriBuilder.build().toUri(), String.class);
             resp = responseEntity.getBody();
         }
+        resp = Base64Util.decode(resp);
         return resp;
     }
 
