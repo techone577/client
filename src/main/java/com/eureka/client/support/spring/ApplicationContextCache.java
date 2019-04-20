@@ -10,6 +10,7 @@ import com.eureka.client.support.annotation.ServiceInfo;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.aop.support.AopUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -82,7 +83,8 @@ public class ApplicationContextCache implements ApplicationContextAware {
         Map<String, Object> restMap = ct.getBeansWithAnnotation(RestController.class);
         Collection<Object> c = restMap.values();
         for (Object ob : c) {
-            getServiceInfoAnnotation(ob.getClass(), list);
+            //防止ob为代理对象
+            getServiceInfoAnnotation(AopUtils.getTargetClass(ob), list);
         }
     }
 
