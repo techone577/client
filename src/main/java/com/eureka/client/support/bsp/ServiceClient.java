@@ -20,10 +20,16 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -72,6 +78,7 @@ public class ServiceClient {
         params = Base64Util.encodeToUrlSafeString(params);
         if (RestMethod.POST.equalsIgnoreCase(service.getMethod())) {
             ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, params, String.class);
+            setCookie(responseEntity);
             resp = responseEntity.getBody();
         } else if (RestMethod.GET.equalsIgnoreCase(service.getMethod())) {
             /**
@@ -79,10 +86,35 @@ public class ServiceClient {
              */
             UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url + Constants.QUESTION_MARK + params);
             ResponseEntity<String> responseEntity = restTemplate.getForEntity(uriBuilder.build().toUri(), String.class);
+            setCookie(responseEntity);
             resp = responseEntity.getBody();
         }
         resp = Base64Util.decode(resp);
         return resp;
+    }
+
+
+    /**
+     * 设置cookie
+     * @param responseEntity
+     */
+    private void setCookie(ResponseEntity responseEntity){
+        if(null != responseEntity && responseEntity.getHeaders().containsKey("Set-Cookie")){
+            HttpHeaders httpHeaders = responseEntity.getHeaders();
+            List<String> cookies = httpHeaders.get("Set-Cookie");
+            ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+            HttpServletResponse response = attributes.getResponse();
+            if(null != cookies){
+                cookies.forEach(i->{
+                    String name = i.split(";")[0].split("=")[0];
+                    String value = i.split(";")[0].split("=")[1];
+                    Cookie cookie = new Cookie(name,value);
+                    cookie.setMaxAge(3600);
+                    cookie.setPath("/");
+                    response.addCookie(cookie);
+                });
+            }
+        }
     }
 
     private List<ServiceEntity> pullServiceFromLocal () {
