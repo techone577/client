@@ -84,7 +84,12 @@ public class ServiceClient {
             /**
              * 避免restTemplate强制url encode
              */
-            UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(url + Constants.QUESTION_MARK + params);
+            UriComponentsBuilder uriBuilder = null;
+            if (null != params) {
+                uriBuilder = UriComponentsBuilder.fromHttpUrl(url + Constants.QUESTION_MARK + params);
+            } else{
+                uriBuilder = UriComponentsBuilder.fromHttpUrl(url);
+            }
             ResponseEntity<String> responseEntity = restTemplate.getForEntity(uriBuilder.build().toUri(), String.class);
             setCookie(responseEntity);
             resp = responseEntity.getBody();
